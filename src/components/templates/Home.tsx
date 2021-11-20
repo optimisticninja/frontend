@@ -12,6 +12,7 @@ import { StyledPre } from '../atoms';
 import { useGlobalState } from '../../hooks/useGlobalState';
 import MediaCard from '../molecules/MediaCard';
 import { GlobalStateInterface } from '../../state/GlobalStateProvider';
+import { Posts } from '../organisms';
 
 const Home = function Home(): React.ReactElement {
   const { state, setState } = useGlobalState();
@@ -24,15 +25,10 @@ const Home = function Home(): React.ReactElement {
     };
     apiInstance.getPosts(opts).then((data: ListPostsResponse) => {
       setState((prev: GlobalStateInterface) => ({ ...prev, posts: data.posts }));
-    }, (error: any) => {
+    }, (error: unknown) => {
       console.error(error);
     });
   }, [setState]);
-  const cards = state?.posts?.map((post: Post) => (
-    <Grid item xs={8} md={4} justifyContent="center">
-      <MediaCard id={post.id} title={post.title} summary={post.summary} imageUrl={post.imageUrl} />
-    </Grid>
-  ));
   return (
     <>
       <Grid container spacing={2} xs justifyItems="center" justifyContent="center">
@@ -48,9 +44,7 @@ const Home = function Home(): React.ReactElement {
           </StyledPre>
         </Grid>
       </Grid>
-      <Grid container spacing={2} justifyItems="center" justifyContent="center">
-        {cards}
-      </Grid>
+      <Posts />
     </>
   );
 };

@@ -5,9 +5,10 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { irBlack } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-const MarkdownListItem = function MarkdownListItem(props: any): React.ReactElement {
+// eslint-disable-next-line max-len
+const MarkdownListItem = function MarkdownListItem(props: unknown): React.ReactElement {
   return <Box component="li" sx={{ mt: 1, typography: 'body1' }} {...props} />;
 };
 
@@ -45,9 +46,13 @@ const options = {
     li: {
       component: MarkdownListItem,
     },
+    pre: {
+      component: SyntaxHighlighter,
+      props: { style: irBlack },
+    },
     code: {
       component: SyntaxHighlighter,
-      props: { style: dark },
+      props: { style: irBlack },
     },
   },
 };

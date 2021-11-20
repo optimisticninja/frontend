@@ -1,13 +1,20 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { FormEventHandler, KeyboardEventHandler, useState } from 'react';
 import {
   AppBar, IconButton, InputBase, Toolbar, Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
+import
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+{ PostsApi, ListPostsResponse, Post } from '@optimisticninja/posts-api-js-client';
+import { useNavigate } from 'react-router';
 import { drawerWidth } from '../../constants';
 import { LoginButton, UserAvatar } from '../molecules';
+import { GlobalStateInterface } from '../../state/GlobalStateProvider';
+import { useGlobalState } from '../../hooks/useGlobalState';
 
 interface Handlers {
     handleDrawerToggle: () => void
@@ -57,6 +64,35 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const SearchAndLoginBar = function SearchAndLoginBar(props: Handlers): React.ReactElement {
   const { handleDrawerToggle } = props;
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+  const { state, setState } = useGlobalState();
+
+  const handleSearchSubmit = (event: any): void => {
+    if (event.key === 'Enter') {
+      const textBlocks = /'(''|[^'])*'/;
+      const sqlStatements = /\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b/i;
+      setQuery(event.target.value);
+
+      if (query.match(textBlocks) || query.match(sqlStatements)) {
+        navigate('/ohno');
+      } else {
+        const apiInstance = new PostsApi();
+        const opts = {
+          page: 0, // Number | page offset
+          size: 50, // Number | page size
+          query,
+        };
+        apiInstance.getPosts(opts).then((data: ListPostsResponse) => {
+          console.log(setState);
+          setState((prev: GlobalStateInterface) => ({ ...prev, posts: data.posts }));
+          navigate(`/posts?query=${query}`);
+        }, (error: unknown) => {
+          console.error(error);
+        });
+      }
+    }
+  };
 
   return (
     <AppBar
@@ -89,6 +125,8 @@ const SearchAndLoginBar = function SearchAndLoginBar(props: Handlers): React.Rea
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ 'aria-label': 'search' }}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleSearchSubmit}
           />
         </Search>
         <LoginButton />

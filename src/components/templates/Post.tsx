@@ -14,16 +14,12 @@ const PostComponent = function PostComponent(): React.ReactElement {
 
   useEffect(() => {
     const apiInstance = new PostsApi();
-    const opts = {
-      page: 0, // Number | page offset
-      size: 6, // Number | page size
-    };
     apiInstance.getPost(params.id).then((data: Post) => {
       setPost(data);
-    }, (error: any) => {
+    }, (error: unknown) => {
       console.error(error);
     });
-  }, [setPost]);
+  }, [setPost, params.id]);
 
   return (
     <>
