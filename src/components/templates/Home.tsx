@@ -4,18 +4,17 @@ import React, { useEffect } from 'react';
 import
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-{ PostsApi, ListPostsResponse, Post } from '@optimisticninja/posts-api-js-client';
+{ PostsApi, ListPostsResponse } from '@optimisticninja/posts-api-js-client';
 import { Grid } from '@mui/material';
 import { banner } from '../../constants';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { StyledPre } from '../atoms';
-import { useGlobalState } from '../../hooks/useGlobalState';
-import MediaCard from '../molecules/MediaCard';
+import { useGlobalState } from '../../hooks';
 import { GlobalStateInterface } from '../../state/GlobalStateProvider';
 import { Posts } from '../organisms';
 
 const Home = function Home(): React.ReactElement {
-  const { state, setState } = useGlobalState();
+  const { setState } = useGlobalState();
   useDocumentTitle('Home');
   useEffect(() => {
     const apiInstance = new PostsApi();

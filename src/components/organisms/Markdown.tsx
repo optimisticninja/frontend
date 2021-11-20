@@ -57,6 +57,7 @@ const options = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Markdown = function Markdown(props: any): React.ReactElement {
   return <ReactMarkdown options={options} {...props} />;
 };

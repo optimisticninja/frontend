@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { FormEventHandler, KeyboardEventHandler, useState } from 'react';
+import React, { useState } from 'react';
 import {
   AppBar, IconButton, InputBase, Toolbar, Typography,
 } from '@mui/material';
@@ -9,12 +9,12 @@ import { styled, alpha } from '@mui/material/styles';
 import
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-{ PostsApi, ListPostsResponse, Post } from '@optimisticninja/posts-api-js-client';
+{ PostsApi, ListPostsResponse } from '@optimisticninja/posts-api-js-client';
 import { useNavigate } from 'react-router';
 import { drawerWidth } from '../../constants';
 import { LoginButton, UserAvatar } from '../molecules';
 import { GlobalStateInterface } from '../../state/GlobalStateProvider';
-import { useGlobalState } from '../../hooks/useGlobalState';
+import { useGlobalState } from '../../hooks';
 
 interface Handlers {
     handleDrawerToggle: () => void
@@ -66,13 +66,13 @@ const SearchAndLoginBar = function SearchAndLoginBar(props: Handlers): React.Rea
   const { handleDrawerToggle } = props;
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
-  const { state, setState } = useGlobalState();
+  const { setState } = useGlobalState();
 
-  const handleSearchSubmit = (event: any): void => {
-    if (event.key === 'Enter') {
+  const handleSearchSubmit = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.code === 'Enter') {
       const textBlocks = /'(''|[^'])*'/;
       const sqlStatements = /\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE){0,1}|INSERT( +INTO){0,1}|MERGE|SELECT|UPDATE|UNION( +ALL){0,1})\b/i;
-      setQuery(event.target.value);
+      setQuery(event.currentTarget.value);
 
       if (query.match(textBlocks) || query.match(sqlStatements)) {
         navigate('/ohno');
