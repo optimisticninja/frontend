@@ -85,7 +85,9 @@ const SearchAndLoginBar = function SearchAndLoginBar(props: Handlers): React.Rea
         };
         apiInstance.getPosts(opts).then((data: ListPostsResponse) => {
           console.log(setState);
-          setState((prev: GlobalStateInterface) => ({ ...prev, posts: data.postSummaries }));
+          setState((prev: GlobalStateInterface) => ({
+            ...prev, posts: data.postSummaries, nextPage: data.nextPage, page: data.page, size: data.size,
+          }));
           navigate(`/posts?query=${query}`);
         }, (error: unknown) => {
           console.error(error);

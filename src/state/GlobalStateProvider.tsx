@@ -6,7 +6,11 @@ import React, {
 } from 'react';
 
 export interface GlobalStateInterface {
-    posts: Post[] | []
+    posts: Post[] | [],
+    nextPage: number | null,
+    page: number | null,
+    size: number | null,
+    hasPrevious: boolean | false
 }
 
 const GlobalStateContext = createContext({

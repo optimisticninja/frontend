@@ -23,7 +23,9 @@ const Home = function Home(): React.ReactElement {
       size: 6, // Number | page size
     };
     apiInstance.getPosts(opts).then((data: ListPostsResponse) => {
-      setState((prev: GlobalStateInterface) => ({ ...prev, posts: data.postSummaries }));
+      setState((prev: GlobalStateInterface) => ({
+        ...prev, posts: data.postSummaries, nextPage: data.nextPage, page: opts.page, size: opts.size,
+      }));
     }, (error: unknown) => {
       console.error(error);
     });
